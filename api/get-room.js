@@ -48,7 +48,8 @@ export default async function handler(req, res) {
       players: room.players.map(p => ({
         id: p.id,
         name: p.name,
-        isHost: p.isHost
+        isHost: p.isHost,
+        ready: p.ready || false
         // NO incluir el rol
       }))
     });
