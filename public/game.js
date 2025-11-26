@@ -99,19 +99,8 @@ async function syncCheck() {
     if (!response.ok) return;
     
     const data = await response.json();
-    currentRoom = data;
     
-    // Sincronización: Si el host volvió al lobby, redirigir a todos
-    if (data.currentPage === 'lobby' && !isHost) {
-      clearInterval(syncInterval);
-      toast.info('El host volvió al lobby');
-      setTimeout(() => {
-        window.location.href = `lobby.html?room=${roomCode}`;
-      }, 1500);
-      return;
-    }
-    
-    // Sincronización: Mostrar orden de la ruleta para todos
+    // Solo sincronizar la ruleta (NO la navegación)
     if (data.wheelSpun && data.playOrder && !wheelOrderShown) {
       wheelOrderShown = true;
       showWheelOrder(data.playOrder);
@@ -229,25 +218,9 @@ async function resetGame() {
 }
 
 function backToLobby() {
-  const message = isHost ? 
-    '¿Volver al lobby? Todos los jugadores volverán contigo.' : 
-    '¿Volver al lobby?';
-  
-  toast.confirm(message, async () => {
-    clearInterval(checkInterval);
-    
-    // Si es el host, sincronizar navegación para todos
-    if (isHost) {
-      try {
-        await fetch('/api/sync-navigation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ roomCode, playerId, action: 'lobby' })
-        });
-      } catch (error) {
-        console.error('Error al sincronizar:', error);
-      }
-    }
+  toast.confirm('¿Volver al lobby?', () => {
+    if (checkInterval) clearInterval(checkInterval);
+    if (syncInterval) clearInterval(syncInterval);
     
     toast.info('Volviendo al lobby...');
     setTimeout(() => {
@@ -258,7 +231,8 @@ function backToLobby() {
 
 function leaveRoom() {
   toast.confirm('¿Estás seguro que quieres salir de la sala?', async () => {
-    clearInterval(checkInterval);
+    if (checkInterval) clearInterval(checkInterval);
+    if (syncInterval) clearInterval(syncInterval);
     
     try {
       // Notificar al servidor que el jugador salió

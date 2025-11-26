@@ -63,8 +63,7 @@ export default async function handler(req, res) {
           isHost: p.isHost
         })),
         playOrder: room.playOrder,
-        wheelSpun: room.wheelSpun || false,
-        currentPage: room.currentPage || 'game' // Para sincronización
+        wheelSpun: room.wheelSpun || false
       }
     });
 
