@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Impostor - Juego</title>
+  <link rel="stylesheet" href="styles.css">
+  <script async src="ads.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4136717777404755"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Anuncio superior móvil -->
+    <div class="ad-mobile ad-mobile-top">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4136717777404755"
+           data-ad-slot="6950780090"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <div class="ad-placeholder">Espacio Publicitario Móvil</div>
+    </div>
+
+    <!-- Anuncio lateral izquierdo (Desktop) -->
+    <aside class="ad-sidebar left">
+      <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-4136717777404755"
+             data-ad-slot="1734930678"></ins>
+        <div class="ad-placeholder">Espacio Publicitario</div>
+      </div>
+    </aside>
+
+    <!-- Contenido del juego -->
+    <div class="game-content">
+      <div class="container">
+    <div id="countdownScreen">
+      <h1>El juego está por comenzar...</h1>
+      <div class="countdown" id="countdown">10</div>
+      <p>Prepárate para ver tu rol</p>
+      <button onclick="backToLobby()" style="background: #ff9800; margin-top: 20px;">
+        ⬅️ Volver al Lobby
+      </button>
+    </div>
+    
+    <div id="roleReveal" class="role-reveal">
+      <h2>Tema: <span id="theme"></span></h2>
+      <div id="roleDisplay" class="role"></div>
+      <p id="roleInstructions"></p>
+      
+      <div class="wheel-container" id="wheelContainer">
+        <h3>¿Quién empieza a hablar?</h3>
+        <div class="wheel" id="wheel">🎯</div>
+        <div id="playOrder" style="font-size: 1.1em; margin-top: 20px;"></div>
+        <button onclick="spinWheel()" id="spinBtn">Girar Ruleta</button>
+        <button onclick="resetGame()" id="resetBtn" style="display:none; background: #ff9800; margin-top: 10px;">
+          🔄 Nueva Ronda
+        </button>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <button onclick="backToLobby()" style="flex: 1; background: #9E9E9E;">
+            ⬅️ Volver al Lobby
+          </button>
+          <button onclick="leaveRoom()" style="flex: 1; background: #f44336;">
+            🚪 Salir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+
+    <!-- Anuncio lateral derecho (Desktop) -->
+    <aside class="ad-sidebar right">
+      <div class="ad-container">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-4136717777404755"
+             data-ad-slot="9421849006"></ins>
+        <div class="ad-placeholder">Espacio Publicitario</div>
+      </div>
+    </aside>
+
+    <!-- Anuncio inferior móvil -->
+    <div class="ad-mobile ad-mobile-bottom">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4136717777404755"
+           data-ad-slot="2768810746"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <div class="ad-placeholder">Espacio Publicitario Móvil</div>
+    </div>
+  </div>
+
+  <script src="toast.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
+

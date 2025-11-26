@@ -1,0 +1,21 @@
+{
+  "name": "impostor-game",
+  "version": "1.0.0",
+  "description": "Juego del Impostor - Un juego de engaño social para jugar con amigos",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "juego",
+    "impostor",
+    "party-game",
+    "social"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  }
+}

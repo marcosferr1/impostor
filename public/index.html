@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎭 El Impostor</title>
+  <link rel="stylesheet" href="styles.css">
+  <script async src="ads.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4136717777404755"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Anuncio superior móvil -->
+    <div class="ad-mobile ad-mobile-top">
+      <!-- Google AdSense - Banner Móvil Superior (Responsive) -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4136717777404755"
+           data-ad-slot="6950780090"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <div class="ad-placeholder">Espacio Publicitario Móvil</div>
+    </div>
+
+    <!-- Anuncio lateral izquierdo (Desktop) -->
+    <aside class="ad-sidebar left">
+      <div class="ad-container">
+        <!-- Google AdSense - Lateral Izquierdo -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-4136717777404755"
+             data-ad-slot="1734930678"></ins>
+        <div class="ad-placeholder">Espacio Publicitario</div>
+      </div>
+    </aside>
+
+    <!-- Contenido del juego -->
+    <div class="game-content">
+      <div class="container">
+    <h1>🎭 El Impostor</h1>
+    
+    <div id="mainMenu" class="menu">
+      <button onclick="showCreateRoom()" class="btn-primary">Crear Sala</button>
+      <button onclick="showJoinRoom()" class="btn-secondary">Unirse a Sala</button>
+    </div>
+
+    <div id="createRoom" class="form-section">
+      <h2>Crear Nueva Sala</h2>
+      <input type="text" id="hostName" placeholder="Tu Nombre" maxlength="20">
+      <select id="theme">
+        <option value="">Selecciona un tema</option>
+        <option value="cantantes">🎤 Cantantes</option>
+        <option value="países">🌍 Países</option>
+        <option value="películas">🎬 Películas</option>
+        <option value="animales">🦁 Animales</option>
+        <option value="comidas">🍕 Comidas</option>
+        <option value="deportes">⚽ Deportes</option>
+      </select>
+      <input type="number" id="maxPlayers" placeholder="Jugadores (3-10)" min="3" max="10" value="5">
+      <button onclick="createRoom()" class="btn-primary">Crear Sala</button>
+      <button onclick="showMainMenu()" class="back-btn">Volver</button>
+    </div>
+
+    <div id="joinRoom" class="form-section">
+      <h2>Unirse a Sala</h2>
+      <input type="text" id="playerName" placeholder="Tu Nombre" maxlength="20">
+      <input type="text" id="roomCodeInput" placeholder="Código de Sala (ej: ABCD)" maxlength="4" style="text-transform: uppercase;">
+      <button onclick="joinRoom()" class="btn-secondary">Unirse</button>
+      <button onclick="showMainMenu()" class="back-btn">Volver</button>
+    </div>
+  </div>
+    </div>
+
+    <!-- Anuncio lateral derecho (Desktop) -->
+    <aside class="ad-sidebar right">
+      <div class="ad-container">
+        <!-- Google AdSense - Lateral Derecho -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:160px;height:600px"
+             data-ad-client="ca-pub-4136717777404755"
+             data-ad-slot="9421849006"></ins>
+        <div class="ad-placeholder">Espacio Publicitario</div>
+      </div>
+    </aside>
+
+    <!-- Anuncio inferior móvil -->
+    <div class="ad-mobile ad-mobile-bottom">
+      <!-- Google AdSense - Banner Móvil Inferior (Responsive) -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4136717777404755"
+           data-ad-slot="2768810746"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <div class="ad-placeholder">Espacio Publicitario Móvil</div>
+    </div>
+  </div>
+
+  <script src="toast.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
