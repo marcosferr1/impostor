@@ -24,13 +24,10 @@ async function checkRole() {
     if (!response.ok) {
       const data = await response.json();
       
-      // Si el jugador no estaba listo, redirigir al lobby
+      // Si el jugador no estaba listo, ya debería estar en el lobby
+      // No hacer nada aquí para evitar loops
       if (data.notReady) {
-        clearInterval(checkInterval);
-        toast.warning('No estabas listo cuando comenzó el juego');
-        setTimeout(() => {
-          window.location.href = `lobby.html?room=${roomCode}`;
-        }, 2000);
+        console.log('Jugador no estaba listo, manteniendo en lobby');
         return;
       }
       

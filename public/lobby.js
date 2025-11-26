@@ -29,13 +29,28 @@ async function loadRoomData() {
     
     const data = await response.json();
     
-    // Sincronización: Si el juego ya comenzó, redirigir
+    // Sincronización: Si el juego ya comenzó, redirigir SOLO si estabas listo
     if (data.started) {
-      clearInterval(pollInterval);
-      toast.info('El juego ha comenzado');
-      setTimeout(() => {
-        window.location.href = `game.html?room=${roomCode}`;
-      }, 500);
+      const me = data.players.find(p => p.id === playerId);
+      
+      // Solo redirigir si el jugador está listo (participará en el juego)
+      if (me && me.ready) {
+        clearInterval(pollInterval);
+        toast.info('El juego ha comenzado');
+        setTimeout(() => {
+          window.location.href = `game.html?room=${roomCode}`;
+        }, 500);
+        return;
+      }
+      
+      // Si no estaba listo, quedarse en el lobby esperando
+      if (me && !me.ready) {
+        // Actualizar UI para mostrar que el juego está en curso
+        document.getElementById('waiting').textContent = 'El juego está en curso. Espera a la próxima ronda...';
+        document.getElementById('waiting').style.display = 'block';
+        document.getElementById('readyBtn').style.display = 'none';
+      }
+      
       return;
     }
     
