@@ -44,7 +44,8 @@ export default async function handler(req, res) {
         id: hostId,
         name: hostName.trim(),
         isHost: true,
-        role: null  // Se asigna al iniciar
+        role: null,  // Se asigna al iniciar
+        ready: true  // El host siempre está listo
       }],
       started: false,
       gameStartedAt: null,

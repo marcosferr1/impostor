@@ -48,9 +48,10 @@ export default async function handler(req, res) {
     room.wheelSpun = false;
     room.wheelSpunAt = null;
     
-    // Limpiar roles de jugadores
+    // Limpiar roles de jugadores pero mantener estado de "listo"
     room.players.forEach(p => {
       p.role = null;
+      // Mantener p.ready como está (no resetear)
     });
 
     await storage.updateRoom(roomCode, room);

@@ -53,7 +53,8 @@ export default async function handler(req, res) {
       id: playerId,
       name: playerName.trim(),
       isHost: false,
-      role: null
+      role: null,
+      ready: false
     };
 
     room.players.push(newPlayer);

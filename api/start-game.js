@@ -47,15 +47,21 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'El juego ya ha comenzado' });
     }
 
-    if (room.players.length < 3) {
-      return res.status(400).json({ error: 'Se necesitan al menos 3 jugadores para iniciar' });
+    // Filtrar solo jugadores listos para jugar
+    const readyPlayers = room.players.filter(p => p.ready);
+    
+    if (readyPlayers.length < 3) {
+      return res.status(400).json({ 
+        error: `Se necesitan al menos 3 jugadores listos para iniciar (${readyPlayers.length}/3)` 
+      });
     }
 
-    // Asignar roles: elegir impostor con aleatoriedad criptográficamente segura
+    // Asignar roles SOLO a jugadores listos
+    // Elegir impostor con aleatoriedad criptográficamente segura
     // Esto garantiza verdadera aleatoriedad y SÍ puede repetir personas en rondas consecutivas
     
     // Shuffle aleatorio de índices usando Fisher-Yates con crypto.randomBytes
-    const indices = Array.from({ length: room.players.length }, (_, i) => i);
+    const indices = Array.from({ length: readyPlayers.length }, (_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = getSecureRandomInt(0, i + 1);
       [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -73,12 +79,20 @@ export default async function handler(req, res) {
     const finalImpostorIndex = shouldUseFirst ? indices[0] : 
       indices[getSecureRandomInt(0, indices.length)];
     
-    room.players.forEach((p, index) => {
+    // Asignar roles solo a jugadores listos
+    readyPlayers.forEach((p, index) => {
       if (index === finalImpostorIndex) {
         p.role = 'IMPOSTOR';
         room.impostorId = p.id;
       } else {
         p.role = room.secretWord;
+      }
+    });
+    
+    // Los jugadores no listos no participan (sin rol)
+    room.players.forEach(p => {
+      if (!p.ready) {
+        p.role = null;
       }
     });
 
@@ -90,20 +104,21 @@ export default async function handler(req, res) {
       room.impostorHistory = [];
     }
     room.impostorHistory.push({
-      playerId: room.players[finalImpostorIndex].id,
-      playerName: room.players[finalImpostorIndex].name,
+      playerId: readyPlayers[finalImpostorIndex].id,
+      playerName: readyPlayers[finalImpostorIndex].name,
       timestamp: Date.now()
     });
 
     await storage.updateRoom(roomCode, room);
 
-    console.log(`[START-GAME] Sala ${roomCode} - Impostor: ${room.players[finalImpostorIndex].name}`);
+    console.log(`[START-GAME] Sala ${roomCode} - Impostor: ${readyPlayers[finalImpostorIndex].name}`);
+    console.log(`[START-GAME] Jugadores listos: ${readyPlayers.length}/${room.players.length}`);
     console.log(`[START-GAME] Historial de impostores:`, room.impostorHistory.map(h => h.playerName).join(' → '));
 
     res.status(200).json({
       success: true,
       gameStartedAt: room.gameStartedAt,
-      playerCount: room.players.length
+      playerCount: readyPlayers.length
     });
 
   } catch (error) {

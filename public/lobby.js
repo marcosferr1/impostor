@@ -50,29 +50,42 @@ async function loadRoomData() {
     data.players.forEach(player => {
       const div = document.createElement('div');
       div.className = player.isHost ? 'player host' : 'player';
+      
+      // Indicador visual de "listo"
+      const readyIndicator = player.ready ? 
+        '<span style="color: #4CAF50; font-weight: bold; margin-left: 10px;">✓ Listo</span>' : 
+        '<span style="color: #999; margin-left: 10px;">⏳ Esperando</span>';
+      
       div.innerHTML = `
         <span>${player.name}</span>
         ${player.isHost ? '<span class="crown">👑</span>' : ''}
+        ${readyIndicator}
       `;
       playersList.appendChild(div);
       
-      if (player.id === playerId && player.isHost) {
-        isHost = true;
+      if (player.id === playerId) {
+        if (player.isHost) {
+          isHost = true;
+        }
+        // Actualizar botón de listo del jugador actual
+        updateReadyButton(player.ready);
       }
     });
     
     // Mostrar botón de iniciar solo al host
     if (isHost) {
       const startBtn = document.getElementById('startBtn');
+      const readyCount = data.players.filter(p => p.ready).length;
+      
       startBtn.style.display = 'block';
-      startBtn.disabled = data.players.length < 3;
+      startBtn.disabled = readyCount < 3;
       document.getElementById('waiting').style.display = 'none';
       document.getElementById('changeThemeBtn').style.display = 'inline-block';
       
-      if (data.players.length < 3) {
-        startBtn.textContent = `Esperando más jugadores (${data.players.length}/3 mínimo)`;
+      if (readyCount < 3) {
+        startBtn.textContent = `Esperando jugadores listos (${readyCount}/3 mínimo)`;
       } else {
-        startBtn.textContent = 'Iniciar Juego';
+        startBtn.textContent = `Iniciar Juego (${readyCount} listos)`;
       }
     }
     
@@ -148,6 +161,47 @@ async function changeTheme() {
   } catch (error) {
     console.error('Error:', error);
     toast.error('Error de conexión');
+  }
+}
+
+async function toggleReady() {
+  try {
+    const response = await fetch('/api/toggle-ready', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomCode, playerId })
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      updateReadyButton(data.ready);
+      toast.success(data.ready ? '¡Estás listo!' : 'Has desmarcado listo');
+      loadRoomData(); // Recargar para actualizar la lista
+    } else {
+      const error = await response.json();
+      toast.error(error.error || 'Error al cambiar estado');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    toast.error('Error de conexión');
+  }
+}
+
+function updateReadyButton(isReady) {
+  const readyBtn = document.getElementById('readyBtn');
+  
+  if (!isHost) {
+    readyBtn.style.display = 'block';
+    
+    if (isReady) {
+      readyBtn.textContent = 'No Estoy Listo';
+      readyBtn.className = 'btn-secondary';
+    } else {
+      readyBtn.textContent = 'Estoy Listo';
+      readyBtn.className = 'btn-success';
+    }
+  } else {
+    readyBtn.style.display = 'none';
   }
 }
 

@@ -37,6 +37,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'El juego no ha comenzado' });
     }
 
+    // Verificar que el jugador estaba listo cuando comenzó el juego
+    if (!player.role) {
+      return res.status(403).json({ 
+        error: 'No estabas listo cuando comenzó el juego',
+        notReady: true 
+      });
+    }
+
     // Calcular tiempo transcurrido desde el inicio
     const elapsedTime = Date.now() - room.gameStartedAt;
     const COUNTDOWN_DURATION = 10000; // 10 segundos

@@ -23,6 +23,17 @@ async function checkRole() {
     
     if (!response.ok) {
       const data = await response.json();
+      
+      // Si el jugador no estaba listo, redirigir al lobby
+      if (data.notReady) {
+        clearInterval(checkInterval);
+        toast.warning('No estabas listo cuando comenzó el juego');
+        setTimeout(() => {
+          window.location.href = `lobby.html?room=${roomCode}`;
+        }, 2000);
+        return;
+      }
+      
       console.error('Error:', data.error);
       return;
     }
@@ -81,6 +92,12 @@ async function checkRole() {
       // Mostrar botón de reset solo al host
       if (isHost) {
         document.getElementById('resetBtn').style.display = 'block';
+      }
+      
+      // Ocultar botón de "Volver al lobby" si eres el host
+      if (isHost) {
+        const backBtn = document.getElementById('backToLobbyBtn');
+        if (backBtn) backBtn.style.display = 'none';
       }
       
       // Iniciar sincronización después de revelar el rol
