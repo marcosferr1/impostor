@@ -4,9 +4,11 @@ const playerId = localStorage.getItem('playerId');
 
 let hasSpun = false;
 let checkInterval;
+let syncInterval;
 let isHost = false;
 let currentRoom = null;
 let wheelOrderShown = false;
+let roleRevealed = false;
 
 if (!roomCode || !playerId) {
   toast.error('Información de sala inválida');
@@ -26,40 +28,24 @@ async function checkRole() {
     }
     
     const data = await response.json();
-    currentRoom = data.room;
-    
-    // Verificar si soy el host
-    if (currentRoom && currentRoom.players) {
-      const me = currentRoom.players.find(p => p.id === playerId);
-      if (me) {
-        isHost = me.isHost;
-      }
-      
-      // Sincronización: Si el host volvió al lobby, redirigir a todos
-      if (currentRoom.currentPage === 'lobby' && !isHost) {
-        clearInterval(checkInterval);
-        toast.info('El host volvió al lobby');
-        setTimeout(() => {
-          window.location.href = `lobby.html?room=${roomCode}`;
-        }, 1500);
-        return;
-      }
-      
-      // Mostrar orden de la ruleta si ya fue girada (sincronización para todos)
-      if (currentRoom.wheelSpun && currentRoom.playOrder && !wheelOrderShown) {
-        wheelOrderShown = true;
-        setTimeout(() => {
-          showWheelOrder(currentRoom.playOrder);
-        }, 500);
-      }
-    }
     
     if (data.countdown > 0) {
-      // Mostrar cuenta regresiva
+      // Mostrar cuenta regresiva (sin sincronización aquí para no interrumpir)
       document.getElementById('countdown').textContent = data.countdown;
     } else if (data.role) {
       // Revelar rol
       clearInterval(checkInterval);
+      roleRevealed = true;
+      
+      currentRoom = data.room;
+      
+      // Verificar si soy el host
+      if (currentRoom && currentRoom.players) {
+        const me = currentRoom.players.find(p => p.id === playerId);
+        if (me) {
+          isHost = me.isHost;
+        }
+      }
       
       document.getElementById('countdownScreen').style.display = 'none';
       document.getElementById('roleReveal').style.display = 'block';
@@ -70,7 +56,7 @@ async function checkRole() {
       const instructions = document.getElementById('roleInstructions');
       
       if (data.isImpostor) {
-        roleDisplay.textContent = '🎭 IMPOSTOR';
+        roleDisplay.textContent = 'IMPOSTOR';
         roleDisplay.className = 'role impostor';
         instructions.textContent = '¡Eres el impostor! Intenta adivinar la palabra sin que te descubran.';
       } else {
@@ -85,17 +71,64 @@ async function checkRole() {
       const spinBtn = document.getElementById('spinBtn');
       if (!isHost) {
         spinBtn.style.display = 'none';
-        document.getElementById('wheelContainer').innerHTML += '<p style="color: #666; margin-top: 10px;">Esperando que el host gire la ruleta...</p>';
+        const waitingMsg = document.createElement('p');
+        waitingMsg.id = 'waitingWheel';
+        waitingMsg.style.cssText = 'color: #666; margin-top: 10px; text-align: center;';
+        waitingMsg.textContent = 'Esperando que el host gire la ruleta...';
+        document.getElementById('wheelContainer').appendChild(waitingMsg);
       }
       
       // Mostrar botón de reset solo al host
       if (isHost) {
         document.getElementById('resetBtn').style.display = 'block';
       }
+      
+      // Iniciar sincronización después de revelar el rol
+      startSyncPolling();
     }
   } catch (error) {
     console.error('Error:', error);
   }
+}
+
+// Polling de sincronización (solo después de revelar roles)
+async function syncCheck() {
+  try {
+    const response = await fetch(`/api/get-room?roomCode=${roomCode}&playerId=${playerId}`);
+    
+    if (!response.ok) return;
+    
+    const data = await response.json();
+    currentRoom = data;
+    
+    // Sincronización: Si el host volvió al lobby, redirigir a todos
+    if (data.currentPage === 'lobby' && !isHost) {
+      clearInterval(syncInterval);
+      toast.info('El host volvió al lobby');
+      setTimeout(() => {
+        window.location.href = `lobby.html?room=${roomCode}`;
+      }, 1500);
+      return;
+    }
+    
+    // Sincronización: Mostrar orden de la ruleta para todos
+    if (data.wheelSpun && data.playOrder && !wheelOrderShown) {
+      wheelOrderShown = true;
+      showWheelOrder(data.playOrder);
+      const waitingMsg = document.getElementById('waitingWheel');
+      if (waitingMsg) waitingMsg.remove();
+      toast.success(`${data.playOrder[0]} empieza la ronda`);
+    }
+    
+  } catch (error) {
+    console.error('Error en sync:', error);
+  }
+}
+
+function startSyncPolling() {
+  // Polling cada 2 segundos para sincronización
+  syncInterval = setInterval(syncCheck, 2000);
+  syncCheck();
 }
 
 function showWheelOrder(order) {

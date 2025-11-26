@@ -43,6 +43,9 @@ export default async function handler(req, res) {
       theme: room.theme,
       maxPlayers: room.maxPlayers,
       started: room.started,
+      wheelSpun: room.wheelSpun || false,
+      playOrder: room.playOrder || null,
+      currentPage: room.currentPage || 'lobby',
       players: room.players.map(p => ({
         id: p.id,
         name: p.name,
