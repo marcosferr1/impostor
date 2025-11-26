@@ -104,16 +104,37 @@ body {
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo h1 {
+  color: #667eea;
+  font-size: 2.5em;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.logo .subtitle {
+  color: #999;
+  font-size: 0.9em;
+  margin: 0;
+  font-weight: 400;
+}
+
 h1 {
   text-align: center;
   color: #667eea;
   margin-bottom: 30px;
   font-size: 2.5em;
+  font-weight: 700;
 }
 
 h2 {
   color: #764ba2;
   margin-bottom: 20px;
+  font-weight: 600;
 }
 
 .menu {
@@ -123,43 +144,85 @@ h2 {
 }
 
 button {
-  padding: 15px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 10px;
-  font-size: 1.1em;
+  border-radius: 8px;
+  font-size: 1em;
   cursor: pointer;
-  transition: all 0.3s;
-  font-weight: bold;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 button:hover:not(:disabled) {
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 button:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none !important;
 }
 
 .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5568d3 0%, #63408a 100%);
+}
+
+.btn-secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary:hover:not(:disabled) {
   background: #667eea;
   color: white;
 }
 
-.btn-secondary {
-  background: #764ba2;
+.back-btn {
+  background: #f5f5f5;
+  color: #666;
+  border: 2px solid #e0e0e0;
+  margin-top: 10px;
+}
+
+.back-btn:hover:not(:disabled) {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
   color: white;
 }
 
-.back-btn {
-  background: #ddd;
-  color: #333;
-  margin-top: 10px;
+.btn-warning {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+  color: white;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #9E9E9E 0%, #757575 100%);
+  color: white;
 }
 
 .form-section {
@@ -493,14 +556,54 @@ input:focus, select:focus {
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
-  /* Reducir ads en tablets */
+@media (max-width: 1400px) {
+  /* Desktop pequeñas */
   .ad-sidebar {
     width: 120px;
   }
   
   .ad-container {
+    min-height: 500px;
+  }
+  
+  .game-content {
+    max-width: 500px;
+  }
+  
+  .container {
+    padding: 25px 18px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 1200px) {
+  /* Tablets grandes */
+  .ad-sidebar {
+    width: 100px;
+  }
+  
+  .ad-container {
     min-height: 400px;
+  }
+  
+  .game-content {
+    max-width: 450px;
+  }
+  
+  .container {
+    padding: 20px 15px;
+  }
+  
+  h1 {
+    font-size: 1.8em;
+  }
+  
+  button {
+    padding: 12px;
+    font-size: 1em;
   }
 }
 

@@ -45,6 +45,9 @@ export default async function handler(req, res) {
     room.gameStartedAt = null;
     room.impostorId = null;
     room.playOrder = null;
+    room.wheelSpun = false;
+    room.wheelSpunAt = null;
+    room.currentPage = 'lobby'; // Sincronizar a todos al lobby
     
     // Limpiar roles de jugadores
     room.players.forEach(p => {

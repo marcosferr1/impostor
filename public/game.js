@@ -6,6 +6,7 @@ let hasSpun = false;
 let checkInterval;
 let isHost = false;
 let currentRoom = null;
+let wheelOrderShown = false;
 
 if (!roomCode || !playerId) {
   toast.error('Información de sala inválida');
@@ -32,6 +33,24 @@ async function checkRole() {
       const me = currentRoom.players.find(p => p.id === playerId);
       if (me) {
         isHost = me.isHost;
+      }
+      
+      // Sincronización: Si el host volvió al lobby, redirigir a todos
+      if (currentRoom.currentPage === 'lobby' && !isHost) {
+        clearInterval(checkInterval);
+        toast.info('El host volvió al lobby');
+        setTimeout(() => {
+          window.location.href = `lobby.html?room=${roomCode}`;
+        }, 1500);
+        return;
+      }
+      
+      // Mostrar orden de la ruleta si ya fue girada (sincronización para todos)
+      if (currentRoom.wheelSpun && currentRoom.playOrder && !wheelOrderShown) {
+        wheelOrderShown = true;
+        setTimeout(() => {
+          showWheelOrder(currentRoom.playOrder);
+        }, 500);
       }
     }
     
@@ -79,6 +98,24 @@ async function checkRole() {
   }
 }
 
+function showWheelOrder(order) {
+  const orderDisplay = document.getElementById('playOrder');
+  const spinBtn = document.getElementById('spinBtn');
+  
+  if (!order || order.length === 0) return;
+  
+  // Mostrar orden completo
+  let orderHTML = '<h3 style="color: #4CAF50; margin-bottom: 15px;">Orden de Juego:</h3>';
+  orderHTML += '<ol style="text-align: left; font-size: 1.2em; line-height: 1.8; background: #f9f9f9; padding: 20px; border-radius: 10px;">';
+  order.forEach((playerName, index) => {
+    orderHTML += `<li style="color: #333; margin: 5px 0;"><strong>${playerName}</strong>${index === 0 ? ' <span style="color: #4CAF50;">• Empieza</span>' : ''}</li>`;
+  });
+  orderHTML += '</ol>';
+  
+  orderDisplay.innerHTML = orderHTML;
+  if (spinBtn) spinBtn.style.display = 'none';
+}
+
 async function spinWheel() {
   if (hasSpun) return;
   
@@ -93,7 +130,6 @@ async function spinWheel() {
   hasSpun = true;
   
   const wheel = document.getElementById('wheel');
-  const orderDisplay = document.getElementById('playOrder');
   
   // Animación de giro
   wheel.classList.add('spinning');
@@ -111,20 +147,12 @@ async function spinWheel() {
     }
     
     const data = await response.json();
+    wheelOrderShown = true;
     
     setTimeout(() => {
       wheel.classList.remove('spinning');
-      
-      // Mostrar orden completo
-      let orderHTML = '<h3 style="color: #4CAF50; margin-bottom: 15px;">🎯 Orden de Juego:</h3>';
-      orderHTML += '<ol style="text-align: left; font-size: 1.2em; line-height: 1.8;">';
-      data.order.forEach((playerName, index) => {
-        orderHTML += `<li><strong>${playerName}</strong>${index === 0 ? ' 👑 (Empieza)' : ''}</li>`;
-      });
-      orderHTML += '</ol>';
-      
-      orderDisplay.innerHTML = orderHTML;
-      spinBtn.style.display = 'none';
+      showWheelOrder(data.order);
+      toast.success(`${data.firstPlayer} empieza la ronda`);
     }, 3000);
     
   } catch (error) {
@@ -168,8 +196,26 @@ async function resetGame() {
 }
 
 function backToLobby() {
-  toast.confirm('¿Volver al lobby? El juego seguirá en curso para los demás.', () => {
+  const message = isHost ? 
+    '¿Volver al lobby? Todos los jugadores volverán contigo.' : 
+    '¿Volver al lobby?';
+  
+  toast.confirm(message, async () => {
     clearInterval(checkInterval);
+    
+    // Si es el host, sincronizar navegación para todos
+    if (isHost) {
+      try {
+        await fetch('/api/sync-navigation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ roomCode, playerId, action: 'lobby' })
+        });
+      } catch (error) {
+        console.error('Error al sincronizar:', error);
+      }
+    }
+    
     toast.info('Volviendo al lobby...');
     setTimeout(() => {
       window.location.href = `lobby.html?room=${roomCode}`;

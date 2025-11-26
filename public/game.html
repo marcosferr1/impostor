@@ -40,8 +40,8 @@
       <h1>El juego está por comenzar...</h1>
       <div class="countdown" id="countdown">10</div>
       <p>Prepárate para ver tu rol</p>
-      <button onclick="backToLobby()" style="background: #ff9800; margin-top: 20px;">
-        ⬅️ Volver al Lobby
+      <button onclick="backToLobby()" class="btn-info" style="margin-top: 20px;">
+        Volver al Lobby
       </button>
     </div>
     
@@ -54,16 +54,16 @@
         <h3>¿Quién empieza a hablar?</h3>
         <div class="wheel" id="wheel">🎯</div>
         <div id="playOrder" style="font-size: 1.1em; margin-top: 20px;"></div>
-        <button onclick="spinWheel()" id="spinBtn">Girar Ruleta</button>
-        <button onclick="resetGame()" id="resetBtn" style="display:none; background: #ff9800; margin-top: 10px;">
-          🔄 Nueva Ronda
+        <button onclick="spinWheel()" id="spinBtn" class="btn-primary">Girar Ruleta</button>
+        <button onclick="resetGame()" id="resetBtn" class="btn-warning" style="display:none; margin-top: 10px;">
+          Nueva Ronda
         </button>
         <div style="margin-top: 20px; display: flex; gap: 10px;">
-          <button onclick="backToLobby()" style="flex: 1; background: #9E9E9E;">
-            ⬅️ Volver al Lobby
+          <button onclick="backToLobby()" class="btn-info" style="flex: 1;">
+            Volver al Lobby
           </button>
-          <button onclick="leaveRoom()" style="flex: 1; background: #f44336;">
-            🚪 Salir
+          <button onclick="leaveRoom()" class="btn-danger" style="flex: 1;">
+            Salir
           </button>
         </div>
       </div>

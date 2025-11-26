@@ -29,10 +29,13 @@ async function loadRoomData() {
     
     const data = await response.json();
     
-    // Si el juego ya comenzó, redirigir
+    // Sincronización: Si el juego ya comenzó, redirigir
     if (data.started) {
       clearInterval(pollInterval);
-      window.location.href = `game.html?room=${roomCode}`;
+      toast.info('El juego ha comenzado');
+      setTimeout(() => {
+        window.location.href = `game.html?room=${roomCode}`;
+      }, 500);
       return;
     }
     

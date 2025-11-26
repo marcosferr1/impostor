@@ -62,7 +62,9 @@ export default async function handler(req, res) {
           name: p.name,
           isHost: p.isHost
         })),
-        playOrder: room.playOrder
+        playOrder: room.playOrder,
+        wheelSpun: room.wheelSpun || false,
+        currentPage: room.currentPage || 'game' // Para sincronización
       }
     });
 

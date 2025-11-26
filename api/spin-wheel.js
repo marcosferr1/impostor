@@ -65,15 +65,18 @@ export default async function handler(req, res) {
     const playerNames = room.players.map(p => p.name);
     const shuffledPlayers = secureShuffleArray(playerNames);
 
-    // Guardar el orden en la sala
+    // Guardar el orden en la sala y marcar que la ruleta fue girada
     room.playOrder = shuffledPlayers;
+    room.wheelSpun = true;
+    room.wheelSpunAt = Date.now();
     await storage.updateRoom(roomCode, room);
 
     console.log(`[RULETA] Sala ${roomCode} - Orden: ${shuffledPlayers.join(' → ')}`);
 
     res.status(200).json({
       order: shuffledPlayers,
-      firstPlayer: shuffledPlayers[0]
+      firstPlayer: shuffledPlayers[0],
+      wheelSpun: true
     });
 
   } catch (error) {
