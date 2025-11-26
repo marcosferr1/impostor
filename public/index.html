@@ -50,12 +50,23 @@
       <input type="text" id="hostName" placeholder="Tu Nombre" maxlength="20">
       <select id="theme">
         <option value="">Selecciona un tema</option>
-        <option value="cantantes">🎤 Cantantes</option>
-        <option value="países">🌍 Países</option>
-        <option value="películas">🎬 Películas</option>
-        <option value="animales">🦁 Animales</option>
-        <option value="comidas">🍕 Comidas</option>
-        <option value="deportes">⚽ Deportes</option>
+        <optgroup label="🎵 Entretenimiento">
+          <option value="cantantes">🎤 Cantantes</option>
+          <option value="películas">🎬 Películas</option>
+          <option value="juegos_gaming">🎮 Juegos / Gaming</option>
+        </optgroup>
+        <optgroup label="⚽ Fútbol">
+          <option value="jugadores_futbol">⭐ Jugadores de Fútbol</option>
+          <option value="equipos_futbol_argentinos">🇦🇷 Equipos Argentinos</option>
+          <option value="equipos_futbol_europeos">🇪🇺 Equipos Europeos</option>
+          <option value="equipos_futbol_sudamericanos">🌎 Equipos Sudamericanos</option>
+        </optgroup>
+        <optgroup label="🌍 General">
+          <option value="países">🌍 Países</option>
+          <option value="animales">🦁 Animales</option>
+          <option value="comidas">🍕 Comidas</option>
+          <option value="deportes">🏆 Deportes en General</option>
+        </optgroup>
       </select>
       <input type="number" id="maxPlayers" placeholder="Jugadores (3-10)" min="3" max="10" value="5">
       <button onclick="createRoom()" class="btn-primary">Crear Sala</button>

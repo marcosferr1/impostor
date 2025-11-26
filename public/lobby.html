@@ -49,12 +49,23 @@
     <div id="themeSelector" style="display:none; margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 10px;">
       <h3 style="margin-bottom: 10px;">Seleccionar Nuevo Tema:</h3>
       <select id="newTheme" style="width: 100%; padding: 10px; margin-bottom: 10px;">
-        <option value="cantantes">🎤 Cantantes</option>
-        <option value="países">🌍 Países</option>
-        <option value="películas">🎬 Películas</option>
-        <option value="animales">🦁 Animales</option>
-        <option value="comidas">🍕 Comidas</option>
-        <option value="deportes">⚽ Deportes</option>
+        <optgroup label="🎵 Entretenimiento">
+          <option value="cantantes">🎤 Cantantes</option>
+          <option value="películas">🎬 Películas</option>
+          <option value="juegos_gaming">🎮 Juegos / Gaming</option>
+        </optgroup>
+        <optgroup label="⚽ Fútbol">
+          <option value="jugadores_futbol">⭐ Jugadores de Fútbol</option>
+          <option value="equipos_futbol_argentinos">🇦🇷 Equipos Argentinos</option>
+          <option value="equipos_futbol_europeos">🇪🇺 Equipos Europeos</option>
+          <option value="equipos_futbol_sudamericanos">🌎 Equipos Sudamericanos</option>
+        </optgroup>
+        <optgroup label="🌍 General">
+          <option value="países">🌍 Países</option>
+          <option value="animales">🦁 Animales</option>
+          <option value="comidas">🍕 Comidas</option>
+          <option value="deportes">🏆 Deportes en General</option>
+        </optgroup>
       </select>
       <button onclick="changeTheme()" style="width: 100%; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Confirmar</button>
       <button onclick="hideThemeSelector()" style="width: 100%; padding: 10px; margin-top: 5px; background: #ddd; color: #333; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
