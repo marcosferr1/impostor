@@ -49,7 +49,7 @@ export default async function handler(req, res) {
         id: p.id,
         name: p.name,
         isHost: p.isHost,
-        ready: p.ready || false
+        ready: p.isHost ? true : (p.ready || false) // El host siempre está listo
         // NO incluir el rol
       }))
     });

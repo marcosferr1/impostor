@@ -51,7 +51,11 @@ export default async function handler(req, res) {
     // Limpiar roles de jugadores pero mantener estado de "listo"
     room.players.forEach(p => {
       p.role = null;
-      // Mantener p.ready como está (no resetear)
+      // Asegurar que el host siempre esté listo
+      if (p.isHost) {
+        p.ready = true;
+      }
+      // Mantener p.ready como está para los demás
     });
 
     await storage.updateRoom(roomCode, room);

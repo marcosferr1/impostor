@@ -57,12 +57,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'El juego no ha comenzado' });
     }
 
-    if (room.players.length === 0) {
+    // Solo incluir jugadores que tienen rol (estaban listos cuando empezó)
+    const playersWithRole = room.players.filter(p => p.role !== null);
+    
+    if (playersWithRole.length === 0) {
       return res.status(400).json({ error: 'No hay jugadores en la sala' });
     }
 
     // Crear orden aleatorio de jugadores usando crypto para máxima aleatoriedad
-    const playerNames = room.players.map(p => p.name);
+    const playerNames = playersWithRole.map(p => p.name);
     const shuffledPlayers = secureShuffleArray(playerNames);
 
     // Guardar el orden en la sala y marcar que la ruleta fue girada
